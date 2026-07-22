@@ -73,6 +73,15 @@ test('it scopes colleague private filters away from demo', function () {
         ->and($visible)->not->toContain('Colleague\'s private notes');
 });
 
+test('re-seeding is idempotent and leaves the dataset unchanged', function () {
+    seed();
+    seed();
+
+    expect(User::count())->toBe(10_000)
+        ->and(SavedFilter::count())->toBe(7)
+        ->and(DB::table('saved_filter_user')->count())->toBe(2);
+});
+
 test('it pre-warms demo recents to 2-of-3 with fixed timestamps', function () {
     $demo = User::where('email', 'demo@example.com')->firstOrFail();
 

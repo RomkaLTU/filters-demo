@@ -38,10 +38,15 @@ class DatabaseSeeder extends Seeder
     private const string BULK_TO = '2025-07-01';
 
     /**
-     * Seed the application's database.
+     * Seed the application's database. Idempotent: skips when the demo
+     * accounts already exist, so it is safe to run on every deploy.
      */
     public function run(): void
     {
+        if (User::where('email', 'demo@example.com')->exists()) {
+            return;
+        }
+
         fake()->seed(self::RNG_SEED);
 
         [$demo, $colleague] = $this->seedDemoAccounts();
