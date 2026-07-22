@@ -9,6 +9,13 @@ test('login screen can be rendered', function () {
     $response->assertOk();
 });
 
+test('login screen shows the demo access helper with a prefilled account', function () {
+    $this->get(route('login'))
+        ->assertOk()
+        ->assertSee('Demo access')
+        ->assertSee('value="demo@example.com"', escape: false);
+});
+
 test('users can authenticate using the login screen', function () {
     $user = User::factory()->create();
 
